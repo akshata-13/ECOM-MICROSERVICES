@@ -1,0 +1,16 @@
+{
+  "name": "user-service",
+  "version": "1.0.0",
+  "description": "User microservice for ecomicro",
+  "main": "src/app.js",
+  
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.3"
+  }
+}
