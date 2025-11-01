@@ -12,11 +12,6 @@ cd ECOM-MICROSERVICES
 # Start all services with Docker
 docker-compose up
 ```
-**Using Docker**
-```bash
-docker-compose up
-```
-
 **Access the Application:**
 
 - Frontend: http://localhost:3000
