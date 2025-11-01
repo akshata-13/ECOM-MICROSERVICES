@@ -12,7 +12,7 @@ cd ECOM-MICROSERVICES
 # Start all services with Docker
 docker-compose up
 ```
-**Using Docker **
+**Using Docker**
 ```bash
 docker-compose up
 ```
