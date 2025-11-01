@@ -3,12 +3,21 @@
 An e-commerce management system designed specifically for local shops and supermarts to efficiently manage their daily operations through an intuitive admin dashboard.
 
 ### 🚀 Quick Start
+Clone and Run:
+```bash
+# Clone the repository
+git clone https://github.com/akshata-13/ECOM-MICROSERVICES.git
+cd ECOM-MICROSERVICES
 
-Using Docker (Recommended):
+# Start all services with Docker
+docker-compose up
+```
+**Using Docker **
 ```bash
 docker-compose up
 ```
-Access the Application:
+
+**Access the Application:**
 
 - Frontend: http://localhost:3000
 - Product Service: http://localhost:8081
@@ -44,3 +53,5 @@ cd ../frontend && npm install
 # Start services individually
 npm start
 ```
+### 📄 License
+MIT License - feel free to use this project for learning and development.
