@@ -3,7 +3,7 @@ const cors = require('cors');
 const { Pool } = require('pg');
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
@@ -14,6 +14,7 @@ const pool = new Pool({
   port: 5432
 });
 
+// Create table and sample data
 (async () => {
   const client = await pool.connect();
   try {
@@ -33,27 +34,55 @@ const pool = new Pool({
       `);
       console.log('✅ Sample products inserted');
     }
+  } catch (error) {
+    console.error('Database setup error:', error);
   } finally {
     client.release();
   }
 })();
 
+// GET all products
 app.get('/products', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM products');
+    const result = await pool.query('SELECT * FROM products ORDER BY id');
     res.json(result.rows);
-  } catch {
+  } catch (error) {
+    console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
 
+// GET product by ID
 app.get('/products/:id', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM products WHERE id=$1', [req.params.id]);
     if (!result.rows.length) return res.status(404).json({ error: 'Product not found' });
     res.json(result.rows[0]);
-  } catch {
+  } catch (error) {
+    console.error('Error fetching product:', error);
     res.status(500).json({ error: 'Failed to fetch product' });
+  }
+});
+
+// CREATE new product
+app.post('/products', async (req, res) => {
+  try {
+    const { name, price } = req.body;
+    console.log('Creating product:', name, price);
+    
+    if (!name || !price) {
+      return res.status(400).json({ error: 'Name and price are required' });
+    }
+
+    const result = await pool.query(
+      'INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *',
+      [name, parseFloat(price)]
+    );
+    
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error creating product:', error);
+    res.status(500).json({ error: 'Failed to create product' });
   }
 });
 

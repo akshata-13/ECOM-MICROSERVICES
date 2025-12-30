@@ -3,7 +3,7 @@ const cors = require('cors');
 const { Pool } = require('pg');
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000" })); // ✅ allow frontend
+app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
@@ -14,6 +14,7 @@ const pool = new Pool({
   port: 5432
 });
 
+// Create table and sample data
 (async () => {
   const client = await pool.connect();
   try {
@@ -33,27 +34,55 @@ const pool = new Pool({
       `);
       console.log('✅ Sample users inserted');
     }
+  } catch (error) {
+    console.error('Database setup error:', error);
   } finally {
     client.release();
   }
 })();
 
+// GET all users
 app.get('/users', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM users');
+    const result = await pool.query('SELECT * FROM users ORDER BY id');
     res.json(result.rows);
-  } catch {
+  } catch (error) {
+    console.error('Error fetching users:', error);
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
 
+// GET user by ID
 app.get('/users/:id', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM users WHERE id=$1', [req.params.id]);
     if (!result.rows.length) return res.status(404).json({ error: 'User not found' });
     res.json(result.rows[0]);
-  } catch {
+  } catch (error) {
+    console.error('Error fetching user:', error);
     res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
+// CREATE new user
+app.post('/users', async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    console.log('Creating user:', name, email);
+    
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Name and email are required' });
+    }
+
+    const result = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+      [name, email]
+    );
+    
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Failed to create user' });
   }
 });
 

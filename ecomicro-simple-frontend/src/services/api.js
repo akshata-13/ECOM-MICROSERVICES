@@ -10,8 +10,7 @@ const api = {
   // Inventory APIs
   getInventory: () => axios.get(ENDPOINTS.inventory),
   getInventoryItem: (id) => axios.get(ENDPOINTS.inventoryById(id)),
-  updateInventory: (id, quantity) => 
-    axios.put(ENDPOINTS.inventoryById(id), { quantity }),
+  updateInventory: (id, quantity) => axios.put(ENDPOINTS.inventoryById(id), { quantity }),
   createInventoryItem: (inventoryData) => axios.post(ENDPOINTS.inventory, inventoryData),
   
   // User APIs
@@ -22,8 +21,6 @@ const api = {
   // Order APIs
   getOrders: () => axios.get(ENDPOINTS.orders),
   createOrder: (orderData) => axios.post(ENDPOINTS.orders, orderData),
-  
-  // User Orders (we'll filter orders by user_id on frontend since backend doesn't have this endpoint)
 };
 
 export default api;

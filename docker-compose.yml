@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   # 🧑‍💼 User Service
   user-db:
@@ -122,9 +120,6 @@ services:
       - inventory-service
     ports:
       - "8084:8084"
-
-  
-      
 
 volumes:
   user-db-data:
